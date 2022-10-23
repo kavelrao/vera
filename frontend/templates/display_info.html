@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<body>
+    <div style="margin: 25px;">
+        <h1>{{ plant_name }}</h1>
+        Also known as 
+        {% for name in common_names %}
+        {% if forloop.last %}and {% endif %}{{ name }}{% if forloop.last %}.{% else %}, {% endif %}
+        {% endfor %}
+    </div>
+    <div class="container" style="display: flex;">
+        <div style="width: 300px; margin-left: 25px;"> 
+            {% if image_url %}
+            <img src="{{ image }}" width="300px">
+            {% else %}
+            <img src="data:image/png;base64,{{ image }}" width="300px">
+            {% endif %}
+        </div>
+
+        <div style="flex-grow: 1; margin-left: 50px; margin-right: 50px;"> 
+            <h2>Taxonomy</h3>
+            <p>
+                <ul>
+                {% for k, v in taxonomy.items %} 
+                <li><strong>{{ k }}</strong>: {{ v }}</li>
+                {% endfor %}
+                </ul>
+            </p>
+            <h2>Description</h3>
+            <p>
+                {{ plant_description }}
+            </p>
+        </div>
+    </div>
+
+</body>
