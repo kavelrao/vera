@@ -3,8 +3,14 @@ from django.urls import reverse
 from frontend.forms import IdentifyForm
 from api.util import identify_plant
 
+import requests
 import base64
+import os
 
+
+GEO_URL = 'https://api.ipgeolocation.io/ipgeo'
+GEO_KEY = os.getenv('GEO_KEY')
+MAPBOX_TOKEN = os.getenv('MAPBOX_TOKEN')
 
 def identify_plant_frontend(request):
     if request.method == 'POST':
@@ -29,6 +35,9 @@ def display_info(request):
         image_url = True
     else:
         image_url = False
+
+    geo_response = requests.get(GEO_URL, params={'apiKey': GEO_KEY}).json()
+
     context = {
         'plant_name': information['plant_name'],
         'common_names': information['plant_details']['common_names'],
@@ -36,5 +45,8 @@ def display_info(request):
         'image_url': image_url,
         'plant_description': information['plant_details']['wiki_description']['value'],
         'taxonomy': information['plant_details']['taxonomy'],
+        'longitude': geo_response['longitude'],
+        'latitude': geo_response['latitude'],
+        'mapbox_token': MAPBOX_TOKEN
     }
     return render(request, 'display_info.html', context)
