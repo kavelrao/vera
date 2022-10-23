@@ -30,13 +30,22 @@ def identify_plant_frontend(request):
 def display_info(request):
     image = request.session['image']
     information = identify_plant(image, live=False)
+    if not information['is_plant']:
+        return redirect(reverse('no_plant'))
+
     if information['plant_details'].get('wiki_image') and information['plant_details']['wiki_image'].get('value'):
         image = information['plant_details']['wiki_image']['value']
         image_url = True
     else:
         image_url = False
 
-    geo_response = requests.get(GEO_URL, params={'apiKey': GEO_KEY}).json()
+    if os.getenv('LONGITUDE') and os.getenv('LATITUDE'):
+        geo_response = {
+            'longitude': float(os.getenv('LONGITUDE')),
+            'latitude': float(os.getenv('LATITUDE'))
+        }
+    else:
+        geo_response = requests.get(GEO_URL, params={'apiKey': GEO_KEY}).json()
 
     context = {
         'plant_name': information['plant_name'],
@@ -50,3 +59,6 @@ def display_info(request):
         'mapbox_token': MAPBOX_TOKEN
     }
     return render(request, 'display_info.html', context)
+
+def no_plant(request):
+    return render(request, 'no_plant.html', {'retry_url': reverse('identify_plant')})

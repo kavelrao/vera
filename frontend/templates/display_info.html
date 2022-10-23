@@ -51,11 +51,14 @@
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/streets-v11', // style URL
             center: [{{ longitude }}, {{ latitude }}], // starting position [lng, lat]
-            zoom: 13, // starting zoom
+            zoom: 14, // starting zoom
             projection: 'globe' // display the map as a 3D globe
         });
         map.on('style.load', () => {
             map.setFog({}); // Set the default atmosphere style
         });
+        const marker = new mapboxgl.Marker({
+            color: "#B363F2"
+        }).setLngLat([{{ longitude }}, {{ latitude }}]).addTo(map);
     </script>
 </body>
