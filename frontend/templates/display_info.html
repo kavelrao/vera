@@ -5,7 +5,7 @@
         <h1>{{ plant_name }}</h1>
         Also known as 
         {% for name in common_names %}
-        {% if forloop.last %}and {% endif %}{{ name }}{% if forloop.last %}.{% else %}, {% endif %}
+        {% if forloop.last %}and {% endif %}"{{ name }}"{% if forloop.last %}.{% else %}, {% endif %}
         {% endfor %}
     </div>
     <div class="container" style="display: flex;">
